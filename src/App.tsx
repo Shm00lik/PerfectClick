@@ -1,37 +1,80 @@
 import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+
+const DT = 0.01; // Seconds
+const SHOW_TIME = 5.5; // Seconds
+
+enum GameState {
+    NOT_STARTED,
+    STARTED,
+    ENDED,
+}
 
 function App() {
-    const [count, setCount] = useState(0);
+    const [counter, setCounter] = useState(0);
+    const [currentInterval, setCurrentInterval] = useState(0);
+    const [gameState, setGameState] = useState<GameState>(
+        GameState.NOT_STARTED
+    );
+
+    const startCounter = () => {
+        const interval = setInterval(() => {
+            setCounter((countdown) => Number((countdown + DT).toFixed(2)));
+        }, DT * 1000);
+
+        setCurrentInterval(interval);
+    };
+
+    const handleClick = () => {
+        switch (gameState) {
+            case GameState.NOT_STARTED: {
+                setGameState(GameState.STARTED);
+                startCounter();
+                break;
+            }
+            case GameState.STARTED: {
+                setGameState(GameState.ENDED);
+                clearInterval(currentInterval);
+                break;
+            }
+            case GameState.ENDED: {
+                setGameState(GameState.NOT_STARTED);
+                setCounter(0);
+                break;
+            }
+            default:
+                break;
+        }
+    };
 
     return (
         <>
-            <div>
-                <a href="https://vitejs.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo" />
-                </a>
-                <a href="https://react.dev" target="_blank">
-                    <img
-                        src={reactLogo}
-                        className="logo react"
-                        alt="React logo"
-                    />
-                </a>
+            <img src="./logo.svg" style={{ margin: 10 }} />
+
+            <div
+                style={{
+                    position: "fixed",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+                onClick={handleClick}
+            >
+                {gameState == GameState.ENDED && <h2>Your Score:</h2>}
+
+                {(gameState == GameState.ENDED || counter <= SHOW_TIME) && (
+                    <h1>
+                        {!(gameState == GameState.ENDED)
+                            ? Math.floor(counter)
+                            : counter}
+                    </h1>
+                )}
+                {gameState == GameState.NOT_STARTED && <h2>Click to start</h2>}
             </div>
-            <h1>Vite + React</h1>
-            <div className="card">
-                <button onClick={() => setCount((count) => count + 1)}>
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
-                </p>
-            </div>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
         </>
     );
 }
