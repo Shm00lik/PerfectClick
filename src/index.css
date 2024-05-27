@@ -1,7 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Assistant&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Assistant:wght@800&display=swap");
 
 :root {
-    font-family: Assistant;
+    font-family: "Assistant", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
 
     color-scheme: light dark;
     color: #698eca;
