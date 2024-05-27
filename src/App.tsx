@@ -48,7 +48,17 @@ function App() {
 
     return (
         <>
-            <img src="./logo.svg" style={{ margin: 10 }} />
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
+                <img
+                    src="./logo.svg"
+                    style={{ margin: 10, maxWidth: "500px" }}
+                />
+            </div>
 
             <div
                 style={{
